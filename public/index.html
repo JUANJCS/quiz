@@ -6,7 +6,6 @@
   <title>TQUIZ — Trans Collectives vs Transport Companies</title>
   <link rel="icon" href="/favicon.ico" />
   <link rel="stylesheet" href="/styles.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700&family=Lato:wght@400;600&display=swap" rel="stylesheet" />
 </head>
 <body>
   <header class="topbar">
@@ -16,49 +15,50 @@
   </header>
 
   <main class="wrap" role="main">
-    <!-- Disclaimer modal -->
+    <!-- Disclaimer -->
     <div id="disclaimer" class="modal">
       <div class="modal-box">
         <h2>Disclaimer</h2>
         <p>
           This project is intended as harmless educational fun about naming ambiguity.
-          It does not mock, judge, or evaluate any community, organization, or identity.
-          All names are used respectfully for learning purposes only.
+          It does not mock or judge any community, organization, or identity.
         </p>
-        <button id="acceptDisclaimer" class="btn primary">I Understand</button>
+        <button id="acceptDisclaimer" class="btn btn-primary">I Understand</button>
       </div>
     </div>
 
-    <h1 class="title">TQUIZ</h1>
-    <p class="subtitle">Trans Collectives vs Transport Companies</p>
+    <h1 class="app-title">TQUIZ</h1>
+    <p class="app-subtitle">Trans Collectives vs Transport Companies</p>
 
+    <!-- Stage: question card OR answer panel -->
     <section class="stage" id="stage">
-      <!-- Question card -->
+      <!-- Question -->
       <div id="card" class="card" aria-live="polite" aria-atomic="true">
         <div class="badge left" id="badgeA" aria-hidden="true">Transport Company</div>
         <div class="badge right" id="badgeB" aria-hidden="true">Trans Collective</div>
         <div id="itemName" class="name">Loading…</div>
       </div>
 
-      <!-- Answer panel -->
+      <!-- Answer -->
       <div id="answerPanel" class="answer-panel">
         <div id="result" class="feedback" aria-live="polite"></div>
-        <div id="media" class="media">
-          <img id="img" alt="" />
+        <div id="media" class="media"><img id="img" alt="" /></div>
+        <p id="explanation" class="explanation"></p>
+
+        <div class="answer-actions">
+          <a id="website" class="btn btn-ghost" href="#" target="_blank" rel="noopener">Visit website</a>
+          <button id="next" class="btn btn-primary" disabled>Next</button>
         </div>
-        <p id="explanation" class="muted"></p>
-        <a id="website" class="link" href="#" target="_blank" rel="noopener">Visit website</a>
-        <button id="next" class="btn outline" disabled>Next</button>
       </div>
     </section>
 
-    <!-- Actions (question view only) -->
+    <!-- Actions (question view) -->
     <div class="actions" id="actions">
-      <button id="btnA" class="link-btn" aria-label="Choose Transport Company">Transport Company</button>
-      <button id="btnB" class="link-btn" aria-label="Choose Trans Collective">Trans Collective</button>
+      <button id="btnA" class="btn btn-danger" aria-label="Choose Transport Company">Transport Company</button>
+      <button id="btnB" class="btn btn-success" aria-label="Choose Trans Collective">Trans Collective</button>
     </div>
 
-    <p class="hint muted">Tip: swipe left/right, press A/B or ←/→.</p>
+    <p class="hint">Tip: swipe left/right, press A/B or ←/→.</p>
   </main>
 
   <script>
