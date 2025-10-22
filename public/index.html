@@ -1,11 +1,13 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>Trans Collectives vs Transport Companies — Swipe</title>
   <link rel="stylesheet" href="/styles.css" />
 </head>
+
 <body>
   <header class="topbar">
     <div class="stat"><span id="progress">0 / 0</span></div>
@@ -15,7 +17,18 @@
 
   <main class="wrap" role="main">
     <h1 class="sr-only" id="gameTitle">Transport Company vs Trans Collective</h1>
-
+    <!-- Disclaimer modal -->
+    <div id="disclaimer" class="modal">
+      <div class="modal-box">
+        <h2>Disclaimer</h2>
+        <p>
+          This project is intended as harmless educational fun about naming ambiguity.
+          It does not mock, judge, or evaluate any community, organization, or identity.
+          All names are used respectfully for learning purposes only.
+        </p>
+        <button id="acceptDisclaimer" class="btn success">I Understand</button>
+      </div>
+    </div>
     <section class="stage" id="stage">
       <!-- Question card -->
       <div id="card" class="card" aria-live="polite" aria-atomic="true">
@@ -38,11 +51,15 @@
 
     <div class="actions" id="actions">
       <button id="btnA" class="btn danger" aria-label="Choose Transport Company">
-        <svg viewBox="0 0 24 24" class="ico" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+        <svg viewBox="0 0 24 24" class="ico" aria-hidden="true">
+          <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" />
+        </svg>
         Transport Company
       </button>
       <button id="btnB" class="btn success" aria-label="Choose Trans Collective">
-        <svg viewBox="0 0 24 24" class="ico" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+        <svg viewBox="0 0 24 24" class="ico" aria-hidden="true">
+          <path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" />
+        </svg>
         Trans Collective
       </button>
     </div>
@@ -56,4 +73,5 @@
   </script>
   <script src="/ui.js" type="module"></script>
 </body>
+
 </html>

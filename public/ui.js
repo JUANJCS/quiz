@@ -5,6 +5,15 @@ const $ = id => document.getElementById(id);
 let items = [], idx = 0, score = 0, streak = 0, answered = false;
 const stage = $('stage'), card = $('card'), itemNameEl = $('itemName');
 
+// disclaimer modal
+const modal = document.getElementById('disclaimer');
+const acceptBtn = document.getElementById('acceptDisclaimer');
+acceptBtn.onclick = () => {
+  modal.style.display = 'none';
+  localStorage.setItem('quizDisclaimerAccepted','yes');
+};
+if(localStorage.getItem('quizDisclaimerAccepted') === 'yes') modal.style.display = 'none';
+
 $('btnA').textContent = CATEGORY_A;
 $('btnB').textContent = CATEGORY_B;
 $('badgeA').textContent = CATEGORY_A;
