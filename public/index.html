@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Two-Category Quiz</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <main class="card" role="main">
+    <div class="row">
+      <span class="pill" id="progress">0 / 0</span>
+      <span class="pill">Score: <span id="score">0</span></span>
+      <span class="pill">Streak: <span id="streak">0</span></span>
+    </div>
+
+    <h1 class="title" id="gameTitle">Galaxy vs Constellation</h1>
+    <div class="name" id="itemName">Loading…</div>
+
+    <div class="row">
+      <button id="btnA">Galaxy</button>
+      <button id="btnB">Constellation</button>
+    </div>
+
+    <div class="space"></div>
+    <div id="result" class="feedback"></div>
+    <div id="detail" hidden>
+      <div class="space"></div>
+      <img id="img" alt="" />
+      <div class="space"></div>
+      <div id="explanation" class="muted"></div>
+    </div>
+
+    <div class="footer">
+      <button id="next" disabled>Next</button>
+      <button id="restart">Restart</button>
+    </div>
+  </main>
+
+  <script src="/ui.js" type="module"></script>
+</body>
+</html>

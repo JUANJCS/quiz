@@ -1,0 +1,16 @@
+[
+  {
+    "id": "andromeda",
+    "name": "Andromeda",
+    "category": "Galaxy",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/9/9e/Andromeda_Galaxy_%28with_h-alpha%29.jpg",
+    "explanation": "A barred spiral galaxy about 2.5 million light-years away."
+  },
+  {
+    "id": "orion",
+    "name": "Orion",
+    "category": "Constellation",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/1/16/Orion_Head_to_Toe.jpg",
+    "explanation": "A bright constellation visible from both hemispheres."
+  }
+]
