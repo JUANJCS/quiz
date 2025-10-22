@@ -1,3 +1,4 @@
+// Pure game logic, hidden on the server
 const fs = require('fs');
 const path = require('path');
 
@@ -8,10 +9,21 @@ function loadItems() {
   return JSON.parse(raw);
 }
 
-function getPublicItems() {
-  return loadItems().map(({ id, name }) => ({ id, name }));
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
 }
 
+// Send only id+name, already shuffled
+function getPublicItemsShuffled() {
+  const safe = loadItems().map(({ id, name }) => ({ id, name }));
+  return shuffle(safe);
+}
+
+// Evaluate an answer and reveal details after the guess
 function checkAnswer(id, choice) {
   const item = loadItems().find(x => x.id === id);
   if (!item) return { found: false };
@@ -23,10 +35,13 @@ function checkAnswer(id, choice) {
       id: item.id,
       name: item.name,
       category: item.category,
-      imageUrl: item.imageUrl,
-      explanation: item.explanation
+      // map to new schema fields
+      image: item.image || item.logo || null,
+      description: item.description || '',
+      website: item.website || '',
+      logo: item.logo || ''
     }
   };
 }
 
-module.exports = { getPublicItems, checkAnswer };
+module.exports = { getPublicItemsShuffled, checkAnswer };

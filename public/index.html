@@ -2,41 +2,58 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Two-Category Quiz</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Trans Collectives vs Transport Companies — Swipe</title>
   <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
-  <main class="card" role="main">
-    <div class="row">
-      <span class="pill" id="progress">0 / 0</span>
-      <span class="pill">Score: <span id="score">0</span></span>
-      <span class="pill">Streak: <span id="streak">0</span></span>
+  <header class="topbar">
+    <div class="stat"><span id="progress">0 / 0</span></div>
+    <div class="stat">Score: <span id="score">0</span></div>
+    <div class="stat">Streak: <span id="streak">0</span></div>
+  </header>
+
+  <main class="wrap" role="main">
+    <h1 class="sr-only" id="gameTitle">Transport Company vs Trans Collective</h1>
+
+    <section class="stage" id="stage">
+      <!-- Question card -->
+      <div id="card" class="card" aria-live="polite" aria-atomic="true">
+        <div class="badge left" id="badgeA" aria-hidden="true">Transport Company</div>
+        <div class="badge right" id="badgeB" aria-hidden="true">Trans Collective</div>
+        <div id="itemName" class="name">Loading…</div>
+      </div>
+
+      <!-- Answer panel -->
+      <div id="answerPanel" class="answer-panel">
+        <div id="result" class="feedback" aria-live="polite"></div>
+        <div id="media" class="media">
+          <img id="img" alt="" />
+        </div>
+        <p id="explanation" class="muted"></p>
+        <a id="website" class="btn link" href="#" target="_blank" rel="noopener">Visit website</a>
+        <button id="next" class="btn ghost" disabled>Next</button>
+      </div>
+    </section>
+
+    <div class="actions" id="actions">
+      <button id="btnA" class="btn danger" aria-label="Choose Transport Company">
+        <svg viewBox="0 0 24 24" class="ico" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+        Transport Company
+      </button>
+      <button id="btnB" class="btn success" aria-label="Choose Trans Collective">
+        <svg viewBox="0 0 24 24" class="ico" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+        Trans Collective
+      </button>
     </div>
 
-    <h1 class="title" id="gameTitle">Galaxy vs Constellation</h1>
-    <div class="name" id="itemName">Loading…</div>
-
-    <div class="row">
-      <button id="btnA">Galaxy</button>
-      <button id="btnB">Constellation</button>
-    </div>
-
-    <div class="space"></div>
-    <div id="result" class="feedback"></div>
-    <div id="detail" hidden>
-      <div class="space"></div>
-      <img id="img" alt="" />
-      <div class="space"></div>
-      <div id="explanation" class="muted"></div>
-    </div>
-
-    <div class="footer">
-      <button id="next" disabled>Next</button>
-      <button id="restart">Restart</button>
-    </div>
+    <p class="hint muted">Tip: swipe left/right, press A/B or ←/→.</p>
   </main>
 
+  <script>
+    window.QUIZ_LABEL_A = 'Transport Company';
+    window.QUIZ_LABEL_B = 'Trans Collective';
+  </script>
   <script src="/ui.js" type="module"></script>
 </body>
 </html>
