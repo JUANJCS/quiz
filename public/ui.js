@@ -5,11 +5,9 @@ const $ = id => document.getElementById(id);
 let items = [], idx = 0, score = 0, streak = 0, answered = false;
 const stage = $('stage'), card = $('card'), itemNameEl = $('itemName');
 
-// Labels
+// Labels on buttons
 $('btnA').textContent = CATEGORY_A;
 $('btnB').textContent = CATEGORY_B;
-$('badgeA').textContent = CATEGORY_A;
-$('badgeB').textContent = CATEGORY_B;
 
 // Disclaimer modal
 const modal = document.getElementById('disclaimer');
@@ -92,7 +90,7 @@ async function answer(choice){
   if (r.correct){ score++; streak++; setFeedback('Correct', true); }
   else { streak = 0; setFeedback(`Wrong — It is ${r.item.category}`, false); }
 
-  // Category placeholder fallbacks
+  // Placeholder logic
   const fallback = r.item.category === 'Trans Collective' ? '/img/trans.png' : '/img/transport.png';
   const media = document.getElementById('media');
   const imgEl = document.getElementById('img');
@@ -155,7 +153,7 @@ card.addEventListener('pointermove', e => {
 );
 
 /* Swipe on answer panel = next */
-const panel = $('answerPanel'); let aStart = 0, aCur = 0, aDrag = false;
+const panel = document.getElementById('answerPanel'); let aStart = 0, aCur = 0, aDrag = false;
 panel.addEventListener('pointerdown', e => {
   if (!stage.classList.contains('show-answer')) return;
   aDrag = true; panel.setPointerCapture(e.pointerId);
