@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Two-Category Guess</title>
+  <style>
+    :root { font-family: system-ui, Arial, sans-serif; }
+    body { margin: 0; background:#0b0c10; color:#e8e8e8; display:grid; place-items:center; min-height:100vh; }
+    .card { width:min(720px, 92vw); background:#15171c; border:1px solid #2a2e35; border-radius:16px; padding:20px; box-shadow:0 10px 30px rgba(0,0,0,.35); }
+    .row { display:flex; gap:12px; flex-wrap:wrap; }
+    .space { height:12px; }
+    .title { font-size:24px; margin:0 0 6px; }
+    .name { font-size:28px; margin:8px 0 16px; letter-spacing:.3px; }
+    button { cursor:pointer; border-radius:12px; border:1px solid #3a3f47; background:#1e2229; color:#e8e8e8; padding:12px 16px; font-size:16px; }
+    button[disabled] { opacity:.5; cursor:not-allowed; }
+    .pill { padding:6px 10px; border-radius:999px; border:1px solid #3a3f47; background:#111319; font-size:12px; }
+    .feedback { font-weight:600; }
+    .ok { color:#39d353; } .bad { color:#ff6b6b; }
+    img { max-width:100%; height:auto; border-radius:12px; border:1px solid #2a2e35; }
+    .muted { color:#a0a4ab; font-size:13px; }
+    .footer { display:flex; justify-content:space-between; align-items:center; margin-top:12px; }
+  </style>
+</head>
+<body>
+  <main class="card" role="main">
+    <div class="row" aria-live="polite">
+      <span class="pill" id="progress">0 / 0</span>
+      <span class="pill">Score: <span id="score">0</span></span>
+      <span class="pill">Streak: <span id="streak">0</span></span>
+    </div>
+
+    <h1 class="title" id="gameTitle">Galaxy vs Constellation</h1>
+    <div class="name" id="itemName">Loading…</div>
+
+    <div class="row">
+      <button id="btnA" aria-label="Choose Category A"></button>
+      <button id="btnB" aria-label="Choose Category B"></button>
+    </div>
+
+    <div class="space"></div>
+    <div id="result" class="feedback" aria-live="polite"></div>
+    <div id="detail" hidden>
+      <div class="space"></div>
+      <img id="img" alt="" />
+      <div class="space"></div>
+      <div id="explanation" class="muted"></div>
+    </div>
+
+    <div class="footer">
+      <button id="next" disabled>Next</button>
+      <button id="restart" style="opacity:.9">Restart</button>
+    </div>
+    <p class="muted">Tip: press “A” or “B” keys.</p>
+  </main>
+
+  <script>
+    // CONFIG: set your two categories
+    const CATEGORY_A = "Galaxy";
+    const CATEGORY_B = "Constellation";
+    document.getElementById("btnA").textContent = CATEGORY_A;
+    document.getElementById("btnB").textContent = CATEGORY_B;
+    document.getElementById("gameTitle").textContent = `${CATEGORY_A} vs ${CATEGORY_B}`;
+
+    // DATA: replace with your own list or fetch('/data.json')
+    const DATA = [
+      { name:"Andromeda", category:"Galaxy", imageUrl:"https://upload.wikimedia.org/wikipedia/commons/9/9e/Andromeda_Galaxy_%28with_h-alpha%29.jpg", explanation:"A barred spiral galaxy about 2.5 million light-years away." },
+      { name:"Sombrero", category:"Galaxy", imageUrl:"https://upload.wikimedia.org/wikipedia/commons/6/65/Sombrero_Galaxy_%28with_companion%29.jpg", explanation:"M104, notable for its bright nucleus and dust lane." },
+      { name:"Orion", category:"Constellation", imageUrl:"https://upload.wikimedia.org/wikipedia/commons/1/16/Orion_Head_to_Toe.jpg", explanation:"One of the most recognizable constellations." },
+      { name:"Lyra", category:"Constellation", imageUrl:"https://upload.wikimedia.org/wikipedia/commons/2/2f/Vega_Lyra.jpg", explanation:"Small constellation home to Vega." }
+    ];
+
+    // State
+    let order = [];
+    let idx = 0, score = 0, streak = 0, answered = false;
+
+    const $name = document.getElementById("itemName");
+    const $btnA = document.getElementById("btnA");
+    const $btnB = document.getElementById("btnB");
+    const $result = document.getElementById("result");
+    const $detail = document.getElementById("detail");
+    const $img = document.getElementById("img");
+    const $exp = document.getElementById("explanation");
+    const $next = document.getElementById("next");
+    const $restart = document.getElementById("restart");
+    const $progress = document.getElementById("progress");
+    const $score = document.getElementById("score");
+    const $streak = document.getElementById("streak");
+
+    function shuffle(arr) {
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function init() {
+      order = shuffle([...Array(DATA.length).keys()]);
+      idx = 0; score = 0; streak = 0; answered = false;
+      $score.textContent = score; $streak.textContent = streak;
+      $progress.textContent = `0 / ${DATA.length}`;
+      $result.textContent = ""; $detail.hidden = true;
+      $next.disabled = true;
+      enableChoices(true);
+      render();
+    }
+
+    function render() {
+      const item = DATA[order[idx]];
+      $name.textContent = item.name;
+      $img.alt = `${item.name} image`;
+    }
+
+    function enableChoices(on) {
+      $btnA.disabled = !on; $btnB.disabled = !on;
+    }
+
+    function answer(choice) {
+      if (answered) return;
+      const item = DATA[order[idx]];
+      const correct = item.category === choice;
+      answered = true;
+      if (correct) { score++; streak++; $result.className = "feedback ok"; $result.textContent = "Correct"; }
+      else { streak = 0; $result.className = "feedback bad"; $result.textContent = `Wrong — It is ${item.category}`; }
+      $score.textContent = score; $streak.textContent = streak;
+      $progress.textContent = `${idx + 1} / ${DATA.length}`;
+      $img.src = item.imageUrl; $exp.textContent = item.explanation; $detail.hidden = false;
+      enableChoices(false);
+      $next.disabled = false;
+    }
+
+    function next() {
+      if (idx < DATA.length - 1) {
+        idx++; answered = false; $result.textContent = ""; $detail.hidden = true; $next.disabled = true;
+        enableChoices(true); render();
+      } else {
+        $name.textContent = "Finished";
+        $result.className = "feedback"; 
+        $result.textContent = `Final score: ${score} / ${DATA.length}`;
+        $detail.hidden = true; enableChoices(false); $next.disabled = true;
+      }
+    }
+
+    // Events
+    $btnA.addEventListener("click", () => answer(CATEGORY_A));
+    $btnB.addEventListener("click", () => answer(CATEGORY_B));
+    $next.addEventListener("click", next);
+    $restart.addEventListener("click", init);
+    window.addEventListener("keydown", (e) => {
+      if (e.key.toLowerCase() === "a") answer(CATEGORY_A);
+      if (e.key.toLowerCase() === "b") answer(CATEGORY_B);
+      if (e.key === "Enter") next();
+    });
+
+    document.addEventListener("DOMContentLoaded", init);
+  </script>
+</body>
+</html>
