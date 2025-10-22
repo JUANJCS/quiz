@@ -5,24 +5,22 @@ const $ = id => document.getElementById(id);
 let items = [], idx = 0, score = 0, streak = 0, answered = false;
 const stage = $('stage'), card = $('card'), itemNameEl = $('itemName');
 
-// disclaimer modal
-const modal = document.getElementById('disclaimer');
-const acceptBtn = document.getElementById('acceptDisclaimer');
-acceptBtn.onclick = () => {
-  modal.style.display = 'none';
-  localStorage.setItem('quizDisclaimerAccepted','yes');
-};
-if(localStorage.getItem('quizDisclaimerAccepted') === 'yes') modal.style.display = 'none';
-
+// Labels
 $('btnA').textContent = CATEGORY_A;
 $('btnB').textContent = CATEGORY_B;
 $('badgeA').textContent = CATEGORY_A;
 $('badgeB').textContent = CATEGORY_B;
 
+// Disclaimer modal
+const modal = document.getElementById('disclaimer');
+const acceptBtn = document.getElementById('acceptDisclaimer');
+acceptBtn.onclick = () => { modal.style.display = 'none'; localStorage.setItem('quizDisclaimerAccepted','yes'); };
+if(localStorage.getItem('quizDisclaimerAccepted') === 'yes') modal.style.display = 'none';
+
+// Events
 $('btnA').onclick = () => answer(CATEGORY_A);
 $('btnB').onclick = () => answer(CATEGORY_B);
 $('next').onclick = () => goNext();
-
 window.addEventListener('keydown', e => {
   if (!stage.classList.contains('show-answer')) {
     if (e.key.toLowerCase() === 'a' || e.key === 'ArrowLeft') answer(CATEGORY_A);
@@ -35,6 +33,7 @@ window.addEventListener('keydown', e => {
 
 init();
 
+// Data + flow
 async function init(){
   const res = await fetch('/api/items');
   const data = await res.json();
@@ -54,22 +53,26 @@ function enableChoices(on){$('btnA').disabled=!on;$('btnB').disabled=!on;canSwip
 function setFeedback(t,ok){const el=$('result');el.className='feedback'+(ok===true?' ok':ok===false?' bad':'');el.textContent=t;}
 function toggleAnswer(s){if(s)stage.classList.add('show-answer');else stage.classList.remove('show-answer');}
 
+// Answer handling
 async function answer(choice){
   if(answered)return;const item=items[idx];if(!item)return;
   answered=true;enableChoices(false);
+
   const res=await fetch('/api/answer',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:item.id,choice})});
-  const r=await res.json();if(r.error){setFeedback(r.error);answered=false;enableChoices(true);return;}
-  if(r.correct){score++;streak++;setFeedback('Correct',true);}else{streak=0;setFeedback(`Wrong — It is ${r.item.category}`,false);}
+  const r=await res.json();
+  if(r.error){setFeedback(r.error);answered=false;enableChoices(true);return;}
+
+  if(r.correct){score++;streak++;setFeedback('Correct',true);} else {streak=0;setFeedback(`Wrong — It is ${r.item.category}`,false);}
+
+  // Category-based placeholder fallback (expects /public/img/trans.png and /public/img/transport.png)
+  const fallback = r.item.category === 'Trans Collective' ? '/img/trans.png' : '/img/transport.png';
 
   const media = document.getElementById('media');
   const imgEl = document.getElementById('img');
   const explEl = document.getElementById('explanation');
-
-  media.style.display = '';
-  explEl.style.display = '';
-
-  imgEl.onerror = () => { media.style.display = 'none'; };
-  imgEl.src = r.item.image || r.item.logo || '';
+  media.style.display = ''; explEl.style.display = '';
+  imgEl.onerror = () => { imgEl.src = fallback; };
+  imgEl.src = r.item.image || r.item.logo || fallback;
   explEl.textContent = r.item.description || '';
 
   const link = $('website');
@@ -81,22 +84,31 @@ async function answer(choice){
 
 function goNext(){
   if(!stage.classList.contains('show-answer'))return;
-  if(idx<items.length-1){idx++;answered=false;setFeedback('');toggleAnswer(false);$('next').disabled=true;enableChoices(true);resetCard();render();setStats(idx);}
-  else{itemNameEl.textContent='Finished';setFeedback(`Final score: ${score} / ${items.length}`);toggleAnswer(false);enableChoices(false);$('next').disabled=true;}
+  if(idx<items.length-1){
+    idx++;answered=false;setFeedback('');toggleAnswer(false);$('next').disabled=true;enableChoices(true);
+    resetCard();render();setStats(idx);
+  } else {
+    itemNameEl.textContent='Finished';
+    setFeedback(`Final score: ${score} / ${items.length}`);
+    toggleAnswer(false);enableChoices(false);$('next').disabled=true;
+  }
 }
 
-/* swipe on question card */
+/* Swipe on question card */
 let startX=0,currentX=0,dragging=false,canSwipeQuestion=true;
 card.addEventListener('pointerdown',e=>{if(!canSwipeQuestion||answered||stage.classList.contains('show-answer'))return;dragging=true;card.setPointerCapture(e.pointerId);startX=e.clientX;currentX=startX;card.classList.add('dragging');});
-card.addEventListener('pointermove',e=>{if(!dragging)return;currentX=e.clientX;const dx=currentX-startX;const rot=Math.max(-15,Math.min(15,dx/10));card.style.transform=`translateX(${dx}px) rotate(${rot}deg) scale(1.01)`;card.classList.toggle('swipe-left',dx<-40);card.classList.toggle('swipe-right',dx>40);});
-card.addEventListener('pointerup',release);card.addEventListener('pointercancel',release);card.addEventListener('pointerleave',release);
-function release(){if(!dragging)return;dragging=false;card.classList.remove('dragging');const dx=currentX-startX;const t=80;if(Math.abs(dx)>=t){const c=dx<0?CATEGORY_A:CATEGORY_B;const off=Math.sign(dx)*600;card.style.transition='transform .18s ease,opacity .18s ease';card.style.transform=`translateX(${off}px) rotate(${Math.sign(dx)*18}deg) scale(1.02)`;card.style.opacity='0';setTimeout(()=>{resetCard();answer(c);},180);}else resetCard();}
+card.addEventListener('pointermove',e=>{if(!dragging)return;currentX=e.clientX;const dx=currentX-startX;const rot=Math.max(-15,Math.min(15,dx/10));card.style.transform=`translateX(${dx}px) rotate(${rot}deg) scale(1.01)`;});
+['pointerup','pointercancel','pointerleave'].forEach(evt=>card.addEventListener(evt,()=>{
+  if(!dragging)return;dragging=false;card.classList.remove('dragging');
+  const dx=currentX-startX;const t=80;
+  if(Math.abs(dx)>=t){const c=dx<0?CATEGORY_A:CATEGORY_B;const off=Math.sign(dx)*600;card.style.transition='transform .18s ease,opacity .18s ease';card.style.transform=`translateX(${off}px) rotate(${Math.sign(dx)*18}deg) scale(1.02)`;card.style.opacity='0';setTimeout(()=>{resetCard();answer(c);},180);} else resetCard();
+}));
 
-/* swipe on answer panel = next */
+/* Swipe on answer panel = next */
 const panel=$('answerPanel');let aStart=0,aCur=0,aDrag=false;
 panel.addEventListener('pointerdown',e=>{if(!stage.classList.contains('show-answer'))return;aDrag=true;panel.setPointerCapture(e.pointerId);aStart=e.clientX;aCur=aStart;});
 panel.addEventListener('pointermove',e=>{if(!aDrag)return;aCur=e.clientX;});
 function finish(){if(!aDrag)return;aDrag=false;const dx=aCur-aStart;if(Math.abs(dx)>=60)goNext();}
 panel.addEventListener('pointerup',finish);panel.addEventListener('pointercancel',finish);panel.addEventListener('pointerleave',finish);
 
-function resetCard(){card.style.transition='transform .18s ease,opacity .18s ease';card.style.transform='translateX(0) rotate(0deg) scale(1)';card.style.opacity='1';card.classList.remove('swipe-left','swipe-right');setTimeout(()=>{card.style.transition='';},200);}
+function resetCard(){card.style.transition='transform .18s ease,opacity .18s ease';card.style.transform='translateX(0) rotate(0deg) scale(1)';card.style.opacity='1';setTimeout(()=>{card.style.transition='';},200);}

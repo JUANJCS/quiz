@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="en">
-
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>T-Quiz</title>
+  <title>TQUIZ — Trans Collectives vs Transport Companies</title>
+  <link rel="icon" href="/favicon.ico" />
   <link rel="stylesheet" href="/styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700&family=Lato:wght@400;600&display=swap" rel="stylesheet" />
 </head>
-
 <body>
   <header class="topbar">
     <div class="stat"><span id="progress">0 / 0</span></div>
@@ -16,7 +16,6 @@
   </header>
 
   <main class="wrap" role="main">
-    <h1 class="sr-only" id="gameTitle">Transport Company vs Trans Collective</h1>
     <!-- Disclaimer modal -->
     <div id="disclaimer" class="modal">
       <div class="modal-box">
@@ -26,9 +25,13 @@
           It does not mock, judge, or evaluate any community, organization, or identity.
           All names are used respectfully for learning purposes only.
         </p>
-        <button id="acceptDisclaimer" class="btn success">I Understand</button>
+        <button id="acceptDisclaimer" class="btn primary">I Understand</button>
       </div>
     </div>
+
+    <h1 class="title">TQUIZ</h1>
+    <p class="subtitle">Trans Collectives vs Transport Companies</p>
+
     <section class="stage" id="stage">
       <!-- Question card -->
       <div id="card" class="card" aria-live="polite" aria-atomic="true">
@@ -44,24 +47,15 @@
           <img id="img" alt="" />
         </div>
         <p id="explanation" class="muted"></p>
-        <a id="website" class="btn link" href="#" target="_blank" rel="noopener">Visit website</a>
-        <button id="next" class="btn ghost" disabled>Next</button>
+        <a id="website" class="link" href="#" target="_blank" rel="noopener">Visit website</a>
+        <button id="next" class="btn outline" disabled>Next</button>
       </div>
     </section>
 
+    <!-- Actions (question view only) -->
     <div class="actions" id="actions">
-      <button id="btnA" class="btn danger" aria-label="Choose Transport Company">
-        <svg viewBox="0 0 24 24" class="ico" aria-hidden="true">
-          <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" />
-        </svg>
-        Transport Company
-      </button>
-      <button id="btnB" class="btn success" aria-label="Choose Trans Collective">
-        <svg viewBox="0 0 24 24" class="ico" aria-hidden="true">
-          <path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" />
-        </svg>
-        Trans Collective
-      </button>
+      <button id="btnA" class="link-btn" aria-label="Choose Transport Company">Transport Company</button>
+      <button id="btnB" class="link-btn" aria-label="Choose Trans Collective">Trans Collective</button>
     </div>
 
     <p class="hint muted">Tip: swipe left/right, press A/B or ←/→.</p>
@@ -73,5 +67,4 @@
   </script>
   <script src="/ui.js" type="module"></script>
 </body>
-
 </html>
