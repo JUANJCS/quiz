@@ -6,63 +6,72 @@
   <title>TQUIZ — Trans Collectives vs Transport Companies</title>
   <link rel="icon" href="/favicon.ico" />
   <link rel="stylesheet" href="/styles.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
 </head>
 <body>
+  <header class="topbar">
+    <strong class="brand">TQUIZ</strong>
+    <div class="pill"><span id="progress">0 / 0</span></div>
+    <div class="pill">Score: <span id="score">0</span></div>
+    <div class="pill">Streak: <span id="streak">0</span></div>
+  </header>
+
   <main class="wrap" role="main">
-    <!-- Disclaimer -->
-    <div id="disclaimer" class="modal">
-      <div class="modal-box">
-        <h2>Disclaimer</h2>
-        <p>
-          This project is intended as harmless educational fun about naming ambiguity.
-          It does not mock, judge, or evaluate any community, organization, or identity.
-          All names are used respectfully for learning purposes only.
-        </p>
-        <button id="acceptDisclaimer" class="btn btn-primary">I Understand</button>
-      </div>
-    </div>
-
-    <h1 class="app-title">TQUIZ</h1>
-
-    <!-- Metrics just above the stage -->
-    <div class="metrics">
-      <span class="chip">Score: <strong id="score">0</strong></span>
-      <span class="chip">Streak: <strong id="streak">0</strong></span>
-      <span class="chip" id="progress">0 / 0</span>
-    </div>
-
-    <!-- Stage: shows either the question card or the answer panel -->
+    <!-- Stage shows either question card or answer card, same size -->
     <section class="stage" id="stage">
-      <!-- Question -->
+      <!-- Question card -->
       <div id="card" class="card" aria-live="polite" aria-atomic="true">
+        <div class="badge left" id="badgeA" aria-hidden="true">Transport Company</div>
+        <div class="badge right" id="badgeB" aria-hidden="true">Trans Collective</div>
         <div id="itemName" class="name">Loading…</div>
       </div>
 
-      <!-- Answer -->
-      <div id="answerPanel" class="card answer">
-        <div id="result" class="feedback" aria-live="polite"></div>
-        <div id="media" class="media"><img id="img" alt="" /></div>
-        <p id="explanation" class="explanation"></p>
+      <!-- Answer card -->
+      <div id="answerPanel" class="card answer" aria-live="polite">
+        <div id="result" class="feedback"></div>
+        <div id="media" class="media">
+          <img id="img" alt="" />
+        </div>
+        <p id="explanation" class="muted"></p>
         <div class="answer-actions">
-          <a id="website" class="btn btn-ghost" href="#" target="_blank" rel="noopener">Visit website</a>
-          <button id="next" class="btn btn-primary" disabled>Next</button>
+          <a id="website" class="btn ghost" href="#" target="_blank" rel="noopener">Visit Website</a>
+          <button id="next" class="btn primary" disabled>Next</button>
         </div>
       </div>
     </section>
 
-    <!-- Actions (question view) -->
-    <div class="actions" id="actions">
-      <button id="btnA" class="btn btn-choice" aria-label="Choose Transport Company">Transport Company</button>
-      <button id="btnB" class="btn btn-choice" aria-label="Choose Trans Collective">Trans Collective</button>
+    <!-- Decision buttons: icon-only, left/right -->
+    <div class="actions" id="actions" aria-label="Choose category">
+      <button id="btnA" class="fab danger" aria-label="Transport Company">
+        <!-- dark truck icon (currentColor) -->
+        <svg viewBox="0 0 24 24" class="ico" aria-hidden="true">
+          <path d="M3 6h11v7h-1.5a2.5 2.5 0 0 0-5 0H6a2 2 0 0 1-2-2V6Z" fill="currentColor"/>
+          <path d="M14 9h4l3 3v4h-2.5a2.5 2.5 0 0 0-5 0H10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="8.5" cy="16" r="2.5" fill="currentColor"/>
+          <circle cx="17.5" cy="16" r="2.5" fill="currentColor"/>
+        </svg>
+      </button>
+
+      <button id="btnB" class="fab success" aria-label="Trans Collective">
+        <!-- dark trans symbol (currentColor) -->
+        <svg viewBox="0 0 24 24" class="ico" aria-hidden="true">
+          <path d="M14 3h7v7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          <path d="M21 3l-6.5 6.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          <circle cx="11" cy="13" r="4" fill="none" stroke="currentColor" stroke-width="1.6"/>
+          <path d="M11 17v4M9 21h4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          <path d="M7 9 3 5M3 9V5h4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+        </svg>
+      </button>
     </div>
 
-    <p class="hint">Tip: swipe left/right, press A/B or ←/→.</p>
+    <p class="hint muted">Tip: swipe left/right on the card, or press ←/→. Press Enter for Next.</p>
   </main>
 
   <script>
+    // Must match items.json categories exactly
     window.QUIZ_LABEL_A = 'Transport Company';
     window.QUIZ_LABEL_B = 'Trans Collective';
+    // Set true if you implemented /img proxy on the server
+    window.USE_IMAGE_PROXY = true;
   </script>
   <script src="/ui.js" type="module"></script>
 </body>
