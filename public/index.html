@@ -2,80 +2,94 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>TQUIZ — Trans Collectives vs Transport Companies</title>
   <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
   <!-- Disclaimer -->
-  <div id="disclaimer" class="modal">
+  <div id="disclaimer" class="modal" aria-modal="true" role="dialog">
     <div class="modal-box">
       <h2>Disclaimer</h2>
       <p>This project is harmless educational fun about naming ambiguity. It does not mock or evaluate any organization or community.</p>
-      <button id="acceptDisclaimer" class="btn primary">I Understand</button>
+      <button id="acceptDisclaimer" class="btn primary" type="button">I Understand</button>
     </div>
   </div>
 
-  <!-- Phone container -->
-  <div class="phone mode-question" id="phone">
-    <!-- Title -->
-    <header class="title-bar">
-      <h1 class="brand">TQUIZ</h1>
-      <p class="subtitle">Transport Company or Trans Collective?</p>
-    </header>
+  <!-- Centered page -->
+  <div class="page">
+    <div class="phone mode-question" id="phone">
+      <!-- Header -->
+      <header class="title-bar">
+        <h1 class="brand">TQUIZ</h1>
+        <p class="subtitle">Transport Company or Trans Collective?</p>
+      </header>
 
-    <!-- Indicators -->
-    <section class="indicators">
-      <div class="stat">
-        <div class="val" id="progress">0 / 0</div>
-        <div class="lbl">Remaining</div>
-      </div>
-      <div class="stat">
-        <div class="val"><span id="score">0</span></div>
-        <div class="lbl">Score</div>
-      </div>
-      <div class="stat">
-        <div class="val"><span id="streak">0</span></div>
-        <div class="lbl">Streak</div>
-      </div>
-    </section>
+      <!-- Indicators -->
+      <section class="indicators">
+        <div class="stat">
+          <div class="val" id="progress">0 / 0</div>
+          <div class="lbl">Remaining</div>
+        </div>
+        <div class="stat">
+          <div class="val"><span id="score">0</span></div>
+          <div class="lbl">Score</div>
+        </div>
+        <div class="stat">
+          <div class="val"><span id="streak">0</span></div>
+          <div class="lbl">Streak</div>
+        </div>
+      </section>
 
-    <!-- Card area -->
-    <main class="card-area" id="stage">
-      <div id="card" class="card">
-        <div id="itemName" class="name">Loading…</div>
-      </div>
+      <!-- Cards -->
+      <main class="card-area" id="stage">
+        <div id="questionCard" class="card">
+          <div id="itemName" class="name">Loading…</div>
+        </div>
 
-      <div id="answerPanel" class="card answer">
-        <div id="result" class="feedback"></div>
-        <div class="media"><img id="img" alt="" /></div>
-        <p id="explanation" class="muted"></p>
-      </div>
-    </main>
+        <div id="answerCard" class="card answer">
+          <div id="result" class="feedback"></div>
+          <div class="media"><img id="img" alt="" /></div>
+          <p id="explanation" class="muted"></p>
+        </div>
+      </main>
 
-    <!-- Footer actions -->
-    <footer class="footer">
-      <!-- Question actions (emoji icons) -->
-      <div class="actions actions-question">
-        <button id="btnA" class="emoji-btn" aria-label="Transport Company"><span class="emoji">🚚</span></button>
-        <button id="btnB" class="emoji-btn" aria-label="Trans Collective"><span class="emoji">⚧</span></button>
-      </div>
+      <!-- Footer -->
+      <footer class="footer">
+        <div class="actions actions-question">
+          <button id="btnA" class="emoji-btn" aria-label="Transport Company"><span class="emoji">🚚</span></button>
+          <button id="btnB" class="emoji-btn" aria-label="Trans Collective"><span class="emoji">⚧</span></button>
+        </div>
 
-      <!-- Answer actions -->
-      <div class="actions actions-answer">
-        <a id="website" class="btn ghost" target="_blank" rel="noopener">Visit Website</a>
-        <button id="next" class="btn primary">Next</button>
-      </div>
-    </footer>
+        <div class="actions actions-answer">
+          <a id="website" class="btn ghost" target="_blank" rel="noopener">Visit Website</a>
+          <button id="next" class="btn primary" type="button">Next</button>
+        </div>
 
-    <!-- Reserved space -->
-    <div class="spacer"></div>
+        <p class="tip">Tip: swipe, tap, or use ← → keys</p>
+      </footer>
+
+      <div class="spacer"></div>
+    </div>
   </div>
 
+  <!-- Labels for ui.js -->
   <script>
     window.QUIZ_LABEL_A = 'Transport Company';
     window.QUIZ_LABEL_B = 'Trans Collective';
   </script>
+
+  <!-- Minimal JS to make the disclaimer work and persist -->
+  <script>
+    (function () {
+      const modal = document.getElementById('disclaimer');
+      const btn = document.getElementById('acceptDisclaimer');
+      const KEY = 'tquiz_disclaimer_ack';
+      if (localStorage.getItem(KEY) === '1') modal.style.display = 'none';
+      btn.addEventListener('click', () => { localStorage.setItem(KEY, '1'); modal.style.display = 'none'; });
+    }());
+  </script>
+
   <script src="/ui.js" type="module"></script>
 </body>
 </html>
