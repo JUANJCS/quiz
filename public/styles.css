@@ -72,10 +72,12 @@ body {
 }
 
 /* Indicators spacing */
-.indicators{
-  padding:10px 12px;
-  margin-top:2px;             /* closer to title */
-  margin-bottom:16px;         /* more space above the card */
+.indicators {
+  padding: 10px 12px;
+  margin-top: 2px;
+  /* closer to title */
+  margin-bottom: 16px;
+  /* more space above the card */
 }
 
 .card-area {
@@ -94,12 +96,11 @@ body {
   flex: 1
 }
 
-/* ===== Title ===== */
+/* ===== Title (bigger) ===== */
 .brand {
+  font-size: clamp(36px, 7vw, 52px);
+  /* was clamp(30px,6.6vw,46px) */
   font-weight: 900;
-  line-height: 1;
-  letter-spacing: .8px;
-  font-size: clamp(30px, 6.6vw, 46px);
   background: conic-gradient(from 220deg at 50% 50%, #ffd676, #ff8ac7, #7ad7ff, #ffd676);
   -webkit-background-clip: text;
   background-clip: text;
@@ -272,10 +273,21 @@ body {
   transition: transform .12s ease, filter .12s ease, box-shadow .12s ease;
 }
 
-/* Footer buttons row */
-.actions{height:86px;}        /* was 68px */
-.emoji{font-size:40px;}       /* was 28–36 via clamp */
-.actions-answer .btn{font-size:clamp(16px,3.8vw,19px);}
+/* ===== Footer buttons (taller) ===== */
+.actions {
+  height: 96px;
+  /* was 86px */
+}
+
+.emoji {
+  font-size: clamp(32px, 7vw, 44px);
+  /* slightly larger for balance */
+}
+
+.actions-answer .btn {
+  font-size: clamp(16px, 4vw, 20px);
+  height: 100%;
+}
 
 .emoji-btn:hover,
 .actions-answer .btn:hover {
