@@ -1,69 +1,62 @@
 const CATEGORY_A = window.QUIZ_LABEL_A;
 const CATEGORY_B = window.QUIZ_LABEL_B;
-let items = [], idx = 0, score = 0, streak = 0, answered = false;
+
+let items=[], idx=0, score=0, streak=0, answered=false;
 
 const $ = id => document.getElementById(id);
 const stage = $('stage');
+const phone = $('phone');
+
 $('btnA').onclick = () => answer(CATEGORY_A);
 $('btnB').onclick = () => answer(CATEGORY_B);
-$('next').onclick = () => next();
+$('next').onclick = () => goNext();
+$('acceptDisclaimer').onclick = () => { $('disclaimer').style.display='none'; start(); };
 
-initDisclaimer();
+// Show disclaimer every load
+window.addEventListener('load', () => { $('disclaimer').style.display='flex'; });
 
-function initDisclaimer() {
-  const modal = $('disclaimer');
-  const btn = $('acceptDisclaimer');
-  btn.onclick = () => {
-    modal.style.display = 'none';
-    localStorage.setItem('disclaimerAccepted', 'yes');
-    start();
-  };
-  if (localStorage.getItem('disclaimerAccepted') === 'yes') {
-    modal.style.display = 'none';
-    start();
-  }
-}
-
-async function start() {
+async function start(){
   const res = await fetch('/api/items');
   const data = await res.json();
   items = data.items || [];
-  idx = 0; score = 0; streak = 0; answered = false;
-  render(); updateStats(); toggleAnswer(false);
+  idx=0; score=0; streak=0; answered=false;
+  render(); updateStats(); showAnswer(false);
 }
 
-function render() {
-  const item = items[idx];
-  if (!item) return;
+function render(){
+  const item = items[idx]; if(!item) return;
   $('itemName').textContent = item.name;
 }
 
-function updateStats() {
+function updateStats(){
   $('progress').textContent = `${idx}/${items.length}`;
   $('score').textContent = score;
   $('streak').textContent = streak;
 }
 
-function toggleAnswer(show) {
-  if (show) stage.classList.add('show-answer');
-  else stage.classList.remove('show-answer');
+function showAnswer(isAnswer){
+  if (isAnswer) {
+    stage.classList.add('show-answer');
+    phone.classList.remove('mode-question'); phone.classList.add('mode-answer');
+  } else {
+    stage.classList.remove('show-answer');
+    phone.classList.remove('mode-answer'); phone.classList.add('mode-question');
+  }
 }
 
-async function answer(choice) {
-  if (answered) return;
-  answered = true;
-
+async function answer(choice){
+  if(answered) return; answered=true;
   const item = items[idx];
-  const r = await (await fetch('/api/answer', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ id: item.id, choice })
+
+  const r = await (await fetch('/api/answer',{
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({ id:item.id, choice })
   })).json();
 
   const ok = r.correct;
   $('result').textContent = ok ? 'Correct' : `Wrong — It is ${r.item.category}`;
   $('result').className = 'feedback ' + (ok ? 'ok' : 'bad');
-  if (ok) { score++; streak++; } else streak = 0;
+  if (ok) { score++; streak++; } else { streak = 0; }
 
   const img = $('img');
   const fallback = r.item.category === CATEGORY_B ? '/img/trans.png' : '/img/transport.png';
@@ -73,19 +66,16 @@ async function answer(choice) {
   $('explanation').textContent = r.item.description || '';
   $('website').href = r.item.website || '#';
 
-  toggleAnswer(true);
+  showAnswer(true);
   updateStats();
 }
 
-function next() {
+function goNext(){
   if (idx < items.length - 1) {
-    idx++; answered = false;
-    toggleAnswer(false);
-    render(); updateStats();
+    idx++; answered=false; render(); updateStats(); showAnswer(false);
   } else {
-    $('itemName').textContent = 'Finished';
-    $('result').textContent = `Final score: ${score}/${items.length}`;
-    toggleAnswer(true);
-    $('next').disabled = true;
+    $('itemName').textContent='Finished';
+    $('result').textContent=`Final score: ${score}/${items.length}`;
+    showAnswer(true);
   }
 }

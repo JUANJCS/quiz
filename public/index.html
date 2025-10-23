@@ -11,22 +11,36 @@
   <div id="disclaimer" class="modal">
     <div class="modal-box">
       <h2>Disclaimer</h2>
-      <p>This project is harmless fun exploring naming ambiguity. It does not mock or evaluate any organization or community.</p>
+      <p>This project is harmless educational fun about naming ambiguity. It does not mock or evaluate any organization or community.</p>
       <button id="acceptDisclaimer" class="btn primary">I Understand</button>
     </div>
   </div>
 
   <!-- Phone container -->
-  <div class="phone">
-    <header class="header">
+  <div class="phone mode-question" id="phone">
+    <!-- Title -->
+    <header class="title-bar">
       <h1 class="brand">TQUIZ</h1>
-      <div class="stats">
-        <div class="pill"><span id="progress">0 / 0</span></div>
-        <div class="pill">Score: <span id="score">0</span></div>
-        <div class="pill">Streak: <span id="streak">0</span></div>
-      </div>
+      <p class="subtitle">Transport Company or Trans Collective?</p>
     </header>
 
+    <!-- Indicators -->
+    <section class="indicators">
+      <div class="stat">
+        <div class="val" id="progress">0 / 0</div>
+        <div class="lbl">Remaining</div>
+      </div>
+      <div class="stat">
+        <div class="val"><span id="score">0</span></div>
+        <div class="lbl">Score</div>
+      </div>
+      <div class="stat">
+        <div class="val"><span id="streak">0</span></div>
+        <div class="lbl">Streak</div>
+      </div>
+    </section>
+
+    <!-- Card area -->
     <main class="card-area" id="stage">
       <div id="card" class="card">
         <div id="itemName" class="name">Loading…</div>
@@ -36,23 +50,26 @@
         <div id="result" class="feedback"></div>
         <div class="media"><img id="img" alt="" /></div>
         <p id="explanation" class="muted"></p>
-        <div class="answer-actions">
-          <a id="website" class="btn ghost" target="_blank">Visit Website</a>
-          <button id="next" class="btn primary">Next</button>
-        </div>
       </div>
     </main>
 
+    <!-- Footer actions -->
     <footer class="footer">
-      <div class="actions">
-        <button id="btnA" class="icon-btn" aria-label="Transport Company">
-          <svg viewBox="0 0 24 24"><path fill="currentColor" d="M3 6h11v7h-1.5a2.5 2.5 0 0 0-5 0H6a2 2 0 0 1-2-2V6Zm11 3h4l3 3v4h-2.5a2.5 2.5 0 0 0-5 0H10"/><circle cx="8.5" cy="16" r="2.5"/><circle cx="17.5" cy="16" r="2.5"/></svg>
-        </button>
-        <button id="btnB" class="icon-btn" aria-label="Trans Collective">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 17v4M9 21h6M5 5l3 3M5 8V5h3M19 5l-3 3M19 8V5h-3" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg>
-        </button>
+      <!-- Question actions (emoji icons) -->
+      <div class="actions actions-question">
+        <button id="btnA" class="emoji-btn" aria-label="Transport Company"><span class="emoji">🚚</span></button>
+        <button id="btnB" class="emoji-btn" aria-label="Trans Collective"><span class="emoji">⚧</span></button>
+      </div>
+
+      <!-- Answer actions -->
+      <div class="actions actions-answer">
+        <a id="website" class="btn ghost" target="_blank" rel="noopener">Visit Website</a>
+        <button id="next" class="btn primary">Next</button>
       </div>
     </footer>
+
+    <!-- Reserved space -->
+    <div class="spacer"></div>
   </div>
 
   <script>
