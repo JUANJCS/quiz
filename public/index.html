@@ -4,92 +4,96 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>TQUIZ — Trans Collectives vs Transport Companies</title>
-  <link rel="stylesheet" href="/styles.css" />
+  <link rel="stylesheet" href="./styles.css" />
 </head>
 <body>
-  <!-- Disclaimer -->
-  <div id="disclaimer" class="modal" aria-modal="true" role="dialog">
-    <div class="modal-box">
-      <h2>Disclaimer</h2>
-      <p>This project is harmless educational fun about naming ambiguity. It does not mock or evaluate any organization or community.</p>
-      <button id="acceptDisclaimer" class="btn primary" type="button">I Understand</button>
+  <main class="app">
+
+    <!-- Title + subtitle -->
+    <h1 class="logo">TQUIZ</h1>
+    <p class="subtitle">Transport Company or Trans Collective?</p>
+
+    <!-- Progress -->
+    <div class="progress" aria-hidden="true"><div id="bar"></div></div>
+
+    <!-- Indicators -->
+    <section class="indicators" aria-label="game indicators">
+      <div class="chip"><div class="n" id="leftCount">0/0</div><div class="l">Remaining</div></div>
+      <div class="chip"><div class="n" id="score">0</div><div class="l">Score</div></div>
+      <div class="chip"><div class="n" id="streak">0</div><div class="l">Streak</div></div>
+    </section>
+
+    <!-- Question card -->
+    <section id="questionCard" class="card" aria-live="polite">
+      <div class="card-inner">
+        <h2 id="name" class="name">Loading…</h2>
+      </div>
+    </section>
+
+    <!-- Answer card -->
+    <section id="answerCard" class="card" aria-live="polite">
+      <div class="card-inner answer-wrap">
+        <div id="answerBadge" class="badge">Result</div>
+        <div id="answerEmoji" class="emoji">✅</div>
+        <p id="desc" class="desc"></p>
+      </div>
+    </section>
+
+    <!-- Actions -->
+    <div id="questionActions" class="actions" role="group" aria-label="answer choices">
+      <button id="btnA" class="btn outline">Transport Company</button>
+      <button id="btnB" class="btn outline">Trans Collective</button>
+    </div>
+
+    <div id="answerActions" class="actions" role="group" aria-label="answer actions">
+      <a id="visit" class="btn outline" href="#" target="_blank" rel="noopener">Visit Website</a>
+      <button id="next" class="btn primary">Next</button>
+    </div>
+
+    <p class="tip">Tip: swipe, tap, or use ← → keys</p>
+
+    <!-- Always-visible footer disclaimer -->
+    <footer id="footerDisclaimer" class="foot" aria-label="disclaimer">
+      <strong>Disclaimer:</strong>
+      TQUIZ shows organization names for linguistic education. No logos, trademarks, endorsements,
+      or affiliations are shown or implied. Results indicate correctness only.
+      <button id="openLegal" class="link" type="button">Legal &amp; Privacy</button>
+    </footer>
+  </main>
+
+  <!-- Start modal (once) -->
+  <div id="disclaimerModal" class="modal" hidden>
+    <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="dmTitle">
+      <h3 id="dmTitle">Legal &amp; Content Notice</h3>
+      <div class="modal-body">
+        <p><strong>TQUIZ</strong> is a linguistic and educational quiz using real names.</p>
+        <ul>
+          <li>No logos, trademarks, or affiliations are implied.</li>
+          <li>Results show correctness only.</li>
+          <li>Only localStorage is used for consent and session.</li>
+        </ul>
+        <p class="fine">By continuing you accept fair-use educational display.</p>
+      </div>
+      <button id="acceptDisclaimer" class="btn primary">I Understand</button>
     </div>
   </div>
 
-  <!-- Centered page -->
-  <div class="page">
-    <div class="phone mode-question" id="phone">
-      <!-- Header -->
-      <header class="title-bar">
-        <h1 class="brand">TQUIZ</h1>
-        <p class="subtitle">Transport Company or Trans Collective?</p>
-      </header>
-
-      <!-- Indicators -->
-      <section class="indicators">
-        <div class="stat">
-          <div class="val" id="progress">0 / 0</div>
-          <div class="lbl">Remaining</div>
-        </div>
-        <div class="stat">
-          <div class="val"><span id="score">0</span></div>
-          <div class="lbl">Score</div>
-        </div>
-        <div class="stat">
-          <div class="val"><span id="streak">0</span></div>
-          <div class="lbl">Streak</div>
-        </div>
-      </section>
-
-      <!-- Cards -->
-      <main class="card-area" id="stage">
-        <div id="questionCard" class="card">
-          <div id="itemName" class="name">Loading…</div>
-        </div>
-
-        <div id="answerCard" class="card answer">
-          <div id="result" class="feedback"></div>
-          <div class="media"><img id="img" alt="" /></div>
-          <p id="explanation" class="muted"></p>
-        </div>
-      </main>
-
-      <!-- Footer -->
-      <footer class="footer">
-        <div class="actions actions-question">
-          <button id="btnA" class="emoji-btn" aria-label="Transport Company"><span class="emoji">🚚</span></button>
-          <button id="btnB" class="emoji-btn" aria-label="Trans Collective"><span class="emoji">⚧</span></button>
-        </div>
-
-        <div class="actions actions-answer">
-          <a id="website" class="btn ghost" target="_blank" rel="noopener">Visit Website</a>
-          <button id="next" class="btn primary" type="button">Next</button>
-        </div>
-
-        <p class="tip">Tip: swipe, tap, or use ← → keys</p>
-      </footer>
-
-      <div class="spacer"></div>
+  <!-- Bottom sheet for legal text -->
+  <div id="legalSheet" class="sheet" hidden>
+    <div class="sheet-box">
+      <div class="sheet-head">
+        <strong>Legal &amp; Privacy</strong>
+        <button id="closeLegal" class="link" type="button">Close</button>
+      </div>
+      <div class="sheet-body">
+        <p><strong>Purpose.</strong> Parody/education about naming ambiguity. No endorsement.</p>
+        <p><strong>Trademarks.</strong> Names are for identification only. All marks belong to owners.</p>
+        <p><strong>Privacy.</strong> No personal data is collected. localStorage keeps progress &amp; consent.</p>
+        <p><strong>Contact.</strong> contact@tquiz.app</p>
+      </div>
     </div>
   </div>
 
-  <!-- Labels for ui.js -->
-  <script>
-    window.QUIZ_LABEL_A = 'Transport Company';
-    window.QUIZ_LABEL_B = 'Trans Collective';
-  </script>
-
-  <!-- Minimal JS to make the disclaimer work and persist -->
-  <script>
-    (function () {
-      const modal = document.getElementById('disclaimer');
-      const btn = document.getElementById('acceptDisclaimer');
-      const KEY = 'tquiz_disclaimer_ack';
-      if (localStorage.getItem(KEY) === '1') modal.style.display = 'none';
-      btn.addEventListener('click', () => { localStorage.setItem(KEY, '1'); modal.style.display = 'none'; });
-    }());
-  </script>
-
-  <script src="/ui.js" type="module"></script>
+  <script src="./app.js" type="module"></script>
 </body>
 </html>
